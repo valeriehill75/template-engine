@@ -9,8 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-//SHOULD LOOK LIKE SOMETHING LIKE THIS WHEN YOU ARE DONE
-//render.render(employees)
+
 const employees = [];
 
 // Write code to use inquirer to gather information about the development team members,
@@ -70,14 +69,15 @@ function makeTeam() {
       switch(choice.newEmployeeQuery) {
         case "Engineer":
           promptEngineer();
-
+          break;
         case "Intern":
           promptIntern();
-          
+          break;          
         default:
           writeTeam();
       }
-    })  
+    })
+  }  
 
 
 
@@ -112,7 +112,7 @@ function makeTeam() {
         answer.github
       );
       employees.push(newEngineer);
-      writeTeam();
+      nextEmployee();
     });
   }  
 
@@ -148,12 +148,18 @@ function makeTeam() {
         answer.school
       );
       employees.push(newIntern);
-      writeTeam();
+      nextEmployee();
     });
   }  
-    
-
   
+  function writeTeam() {
+    if (!fs.existsSync(OUTPUT_DIR)) {
+      fs.mkdirSync(OUTPUT_DIR)
+    }
+    fs.writeFileSync(outputPath, render(employees), "utf-8");
+  }  
+
+  promptUser();
 
 }
 
@@ -177,5 +183,4 @@ makeTeam();
 // and Intern classes should all extend from a class named Employee; see the directions
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
-}}
+// for the provided `render` function to work! ``
